@@ -5,7 +5,6 @@
 template <typename T, std::size_t N>
 class spsc {
 private:
-    // Moved static_assert to class scope where N is a compile-time constant
     static_assert((N != 0) && ((N & (N - 1)) == 0), "N must be a power of 2");
 
     T buffer[N];
@@ -17,7 +16,6 @@ private:
     std::atomic<std::size_t> tail; // consumer
 
 public:
-    // Removed the shadowed std::size_t N argument
     spsc() : head(0), tail(0) {}
 
     ~spsc() = default;

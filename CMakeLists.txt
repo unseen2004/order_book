@@ -8,7 +8,9 @@ add_executable(hft
         main.cc
         LogEvent.h
         mmap_logger.h
-        order_pool.h)
+        order_pool.h
+        price_level.h
+        order_map.h)
 
 include(FetchContent)
 FetchContent_Declare(

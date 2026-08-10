@@ -22,3 +22,18 @@ add_executable(logger_test logger_test.cc)
 target_link_libraries(logger_test gtest_main)
 target_include_directories(logger_test PRIVATE ${PROJECT_SOURCE_DIR})
 add_test(NAME logger_test COMMAND logger_test)
+
+add_executable(price_level_test price_level_test.cc)
+target_link_libraries(price_level_test gtest_main)
+target_include_directories(price_level_test PRIVATE ${PROJECT_SOURCE_DIR})
+add_test(NAME price_level_test COMMAND price_level_test)
+
+add_executable(order_map_test order_map_test.cc)
+target_link_libraries(order_map_test gtest_main)
+target_include_directories(order_map_test PRIVATE ${PROJECT_SOURCE_DIR})
+add_test(NAME order_map_test COMMAND order_map_test)
+
+add_executable(limit_order_book_test limit_order_book_test.cc)
+target_link_libraries(limit_order_book_test gtest_main)
+target_include_directories(limit_order_book_test PRIVATE ${PROJECT_SOURCE_DIR})
+add_test(NAME limit_order_book_test COMMAND limit_order_book_test)

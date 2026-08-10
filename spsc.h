@@ -1,3 +1,6 @@
+#ifndef SPSC_H
+#define SPSC_H
+
 #include <atomic>
 #include <cstddef>
 #include <new>
@@ -10,14 +13,13 @@ private:
     T buffer[N];
 
     alignas(std::hardware_destructive_interference_size)
-    std::atomic<std::size_t> head; // producer
+    std::atomic<std::size_t> head;
 
     alignas(std::hardware_destructive_interference_size)
-    std::atomic<std::size_t> tail; // consumer
+    std::atomic<std::size_t> tail;
 
 public:
     spsc() : head(0), tail(0) {}
-
     ~spsc() = default;
 
     bool push(const T& item) {
@@ -25,7 +27,7 @@ public:
         std::size_t next_head = (current_head + 1) & (N - 1);
 
         if (next_head == tail.load(std::memory_order_acquire)) {
-            return false; // buffer is full (holds N-1 items max)
+            return false;
         }
 
         buffer[current_head] = item;
@@ -37,7 +39,7 @@ public:
         std::size_t current_tail = tail.load(std::memory_order_relaxed);
 
         if (current_tail == head.load(std::memory_order_acquire)) {
-            return false; // buffer is empty
+            return false;
         }
 
         item = buffer[current_tail];
@@ -45,3 +47,5 @@ public:
         return true;
     }
 };
+
+#endif // SPSC_H

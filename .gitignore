@@ -21,6 +21,7 @@ Makefile
 *.o
 *.a
 *.so
+*.log
 *.dylib
 *.dll
 *.exe

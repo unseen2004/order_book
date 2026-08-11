@@ -38,6 +38,11 @@ target_link_libraries(itch_parser_test gtest_main)
 target_include_directories(itch_parser_test PRIVATE ${PROJECT_SOURCE_DIR})
 add_test(NAME itch_parser_test COMMAND itch_parser_test)
 
+add_executable(fix_encoder_test fix_encoder_test.cc)
+target_link_libraries(fix_encoder_test gtest_main)
+target_include_directories(fix_encoder_test PRIVATE ${PROJECT_SOURCE_DIR})
+add_test(NAME fix_encoder_test COMMAND fix_encoder_test)
+
 add_executable(limit_order_book_test limit_order_book_test.cc)
 target_link_libraries(limit_order_book_test gtest_main)
 target_include_directories(limit_order_book_test PRIVATE ${PROJECT_SOURCE_DIR})

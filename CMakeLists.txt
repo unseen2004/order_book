@@ -11,7 +11,8 @@ add_executable(hft
         order_pool.h
         price_level.h
         order_map.h
-        itch_parser.h)
+        itch_parser.h
+        fix_encoder.h)
 
 include(FetchContent)
 FetchContent_Declare(

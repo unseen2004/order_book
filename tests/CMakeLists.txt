@@ -33,6 +33,11 @@ target_link_libraries(order_map_test gtest_main)
 target_include_directories(order_map_test PRIVATE ${PROJECT_SOURCE_DIR})
 add_test(NAME order_map_test COMMAND order_map_test)
 
+add_executable(itch_parser_test itch_parser_test.cc)
+target_link_libraries(itch_parser_test gtest_main)
+target_include_directories(itch_parser_test PRIVATE ${PROJECT_SOURCE_DIR})
+add_test(NAME itch_parser_test COMMAND itch_parser_test)
+
 add_executable(limit_order_book_test limit_order_book_test.cc)
 target_link_libraries(limit_order_book_test gtest_main)
 target_include_directories(limit_order_book_test PRIVATE ${PROJECT_SOURCE_DIR})

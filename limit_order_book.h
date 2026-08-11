@@ -3,6 +3,7 @@
 
 #include <array>
 #include <cstdint>
+#include <algorithm>
 #include "order_map.h"
 #include "order_pool.h"
 #include "price_level.h"
@@ -116,6 +117,70 @@ public:
 
     Order& order_at(int32_t pool_index) {
         return pool_.get(pool_index);
+    }
+
+    void process_order(uint64_t order_id, uint32_t price, uint32_t qty, bool is_buy) {
+        if (order_id == 0 || !valid_price(price) || qty == 0) {
+            return;
+        }
+
+        while (qty > 0) {
+            if (is_buy) {
+                // Crossing check: there are asks AND incoming price >= best ask
+                if (!(best_ask_ < kMaxPriceLevels && price >= best_ask_)) {
+                    break;
+                }
+
+                uint32_t target_price = best_ask_;
+                int32_t head_idx = asks_[target_price].head;
+                if (head_idx == -1) {
+                    refresh_best_ask();
+                    continue;
+                }
+
+                Order& resting = pool_.get(head_idx);
+                uint32_t trade_qty = std::min(qty, resting.qty);
+
+                qty -= trade_qty;
+                resting.qty -= trade_qty;
+
+                // Optional: emit trade event here
+                // std::cout << "TRADE: " << trade_qty << " @ " << resting.price << "\n";
+
+                if (resting.qty == 0) {
+                    cancel_order(resting.order_id);
+                }
+            } else {
+                // Crossing check: there are bids AND incoming price <= best bid
+                if (!(best_bid_ > 0 && price <= best_bid_)) {
+                    break;
+                }
+
+                uint32_t target_price = best_bid_;
+                int32_t head_idx = bids_[target_price].head;
+                if (head_idx == -1) {
+                    refresh_best_bid();
+                    continue;
+                }
+
+                Order& resting = pool_.get(head_idx);
+                uint32_t trade_qty = std::min(qty, resting.qty);
+
+                qty -= trade_qty;
+                resting.qty -= trade_qty;
+
+                // Optional: emit trade event here
+                // std::cout << "TRADE: " << trade_qty << " @ " << resting.price << "\n";
+
+                if (resting.qty == 0) {
+                    cancel_order(resting.order_id);
+                }
+            }
+        }
+
+        if (qty > 0) {
+            add_order(order_id, price, qty, is_buy);
+        }
     }
 };
 
